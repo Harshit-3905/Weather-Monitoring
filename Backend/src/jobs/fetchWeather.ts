@@ -2,6 +2,7 @@ import cron from "node-cron";
 import prisma from "../db/db";
 import { API_KEY, cities } from "../config";
 import axiosInstance from "../utils/axiosInstance";
+import { checkTriggers } from "../services/triggerService";
 
 const fetchWeatherData = async () => {
   try {
@@ -12,8 +13,8 @@ const fetchWeatherData = async () => {
 
       const weatherData = response.data;
 
-      return {
-        city: city,
+      const formattedWeatherData = {
+        city: city.name,
         temp: weatherData.main.temp,
         feels_like: weatherData.main.feels_like,
         temp_min: weatherData.main.temp_min,
@@ -24,28 +25,21 @@ const fetchWeatherData = async () => {
         description: weatherData.weather[0].description,
         timestamp: new Date(),
       };
+
+      // Check triggers for this city's weather data
+      await checkTriggers(formattedWeatherData);
+
+      return formattedWeatherData;
     });
 
     const weatherDataArray = await Promise.all(weatherPromises);
-    const formattedWeatherData = weatherDataArray.map((data) => ({
-      city: data.city.name,
-      temp: data.temp,
-      feels_like: data.feels_like,
-      temp_min: data.temp_min,
-      temp_max: data.temp_max,
-      pressure: data.pressure,
-      humidity: data.humidity,
-      main: data.main,
-      description: data.description,
-      timestamp: data.timestamp,
-    }));
 
     await prisma.weatherData.createMany({
-      data: formattedWeatherData,
+      data: weatherDataArray,
     });
 
     console.log(
-      `Weather data fetched and stored successfully at ${new Date().toISOString()}`
+      `Weather data fetched, triggers checked, and data stored successfully at ${new Date().toISOString()}`
     );
   } catch (error) {
     console.error("Error fetching weather data:", error);
