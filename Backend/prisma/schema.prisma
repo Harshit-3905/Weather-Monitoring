@@ -42,3 +42,19 @@ model DailySummary {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
+
+model UserNotification {
+  id              Int      @id @default(autoincrement())
+  email           String
+  city            String
+  triggerTemp     Float?
+  triggerHumidity Int?
+  triggerPressure Int?
+  isAbove         Boolean  // true if notify when condition is above, false if below
+  parameter       String   // 'temp', 'humidity', or 'pressure'
+  lastNotified    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([email, city, parameter, isAbove])
+}
