@@ -95,26 +95,40 @@ const Charts: React.FC = () => {
         plugins: {
             legend: {
                 position: 'top' as const,
+                labels: {
+                    color: '#D1D5DB', // text-gray-300
+                },
             },
             title: {
                 display: true,
                 text: `Daily Weather Summary for ${selectedCity}`,
+                color: '#F3F4F6', // text-gray-100
+            },
+        },
+        scales: {
+            x: {
+                ticks: { color: '#D1D5DB' }, // text-gray-300
+                grid: { color: '#4B5563' }, // text-gray-600
+            },
+            y: {
+                ticks: { color: '#D1D5DB' }, // text-gray-300
+                grid: { color: '#4B5563' }, // text-gray-600
             },
         },
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Weather Charts</h1>
+        <div className="bg-gray-800 shadow-md rounded-lg p-6">
+            <h1 className="text-3xl font-bold text-gray-100 mb-6">Weather Charts</h1>
             <div className="mb-6">
-                <label htmlFor="city-select" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="city-select" className="block text-sm font-medium text-gray-300 mb-2">
                     Select a city:
                 </label>
                 <select
                     id="city-select"
                     value={selectedCity}
                     onChange={handleCityChange}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-gray-700 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md text-gray-100"
                 >
                     {cities.map((city) => (
                         <option key={city} value={city}>
@@ -124,11 +138,11 @@ const Charts: React.FC = () => {
                 </select>
             </div>
             {dailySummaries.length > 0 ? (
-                <div className="bg-white p-4 rounded-lg shadow">
+                <div className="bg-gray-700 p-4 rounded-lg shadow">
                     <Line options={options} data={chartData} />
                 </div>
             ) : (
-                <p className="text-gray-600 text-center py-4">No data available for the selected city.</p>
+                <p className="text-gray-400 text-center py-4">No data available for the selected city.</p>
             )}
         </div>
     );
