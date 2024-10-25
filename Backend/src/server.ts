@@ -8,6 +8,11 @@ const startServer = async () => {
   try {
     await connectToDatabase();
 
+    if (process.env.SEED_DATA === "true") {
+      console.log("Seeding data...");
+      await import("./db/seed");
+    }
+
     startWeatherFetchCron();
     calculateDailySummaries();
 
