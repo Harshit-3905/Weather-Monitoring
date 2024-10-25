@@ -75,3 +75,36 @@ const sendNotification = async (trigger: any, actualValue: number) => {
     console.error(`Failed to send notification email to ${trigger.email}`);
   }
 };
+
+export const setupTrigger = async (
+  email: string,
+  city: string,
+  parameter: string,
+  triggerValue: number,
+  isAbove: boolean
+) => {
+  const triggerData: any = {
+    email,
+    city,
+    parameter,
+    isAbove,
+  };
+
+  switch (parameter) {
+    case "temp":
+      triggerData.triggerTemp = triggerValue;
+      break;
+    case "humidity":
+      triggerData.triggerHumidity = triggerValue;
+      break;
+    case "pressure":
+      triggerData.triggerPressure = triggerValue;
+      break;
+    default:
+      throw new Error("Invalid parameter");
+  }
+
+  return prisma.userNotification.create({
+    data: triggerData,
+  });
+};

@@ -1,7 +1,7 @@
 import prisma from "../db/db";
 import { cities } from "../config";
 import cron from "node-cron";
-import { WeatherData, DailySummary } from "@prisma/client";
+import { WeatherData } from "@prisma/client";
 
 export const calculateDailySummaries = () => {
   cron.schedule("0 0 * * *", async () => {

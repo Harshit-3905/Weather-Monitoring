@@ -8,7 +8,7 @@ const fetchWeatherData = async () => {
   try {
     const weatherPromises = cities.map(async (city) => {
       const response = await axiosInstance.get(
-        `/weather?lat=${city.lat}&lon=${city.lon}&appid=${API_KEY}`
+        `/weather?q=${city.name}&appid=${API_KEY}`
       );
 
       const weatherData = response.data;

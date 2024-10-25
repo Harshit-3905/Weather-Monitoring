@@ -9,4 +9,8 @@ app.use(express.json());
 
 app.use("/api", weatherRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Weather Monitoring Backend by Harshit Joshi");
+});
+
 export default app;

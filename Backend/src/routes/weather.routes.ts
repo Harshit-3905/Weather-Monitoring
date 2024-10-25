@@ -1,14 +1,14 @@
 import express from "express";
 import {
-  fetchAndSaveWeatherData,
   getDailySummaries,
   getCurrentWeather,
 } from "../controllers/weather.controller";
+import { createTrigger } from "../controllers/trigger.controller";
 
 const router = express.Router();
 
-router.get("/fetch-weather", fetchAndSaveWeatherData);
-router.get("/daily-summaries", getDailySummaries);
+router.get("/daily-summaries/:city", getDailySummaries);
 router.get("/current-weather/:city", getCurrentWeather);
+router.post("/triggers", createTrigger);
 
 export default router;

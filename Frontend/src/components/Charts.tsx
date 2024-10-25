@@ -23,7 +23,9 @@ ChartJS.register(
 import axiosInstance from '../api/axiosInstance';
 
 interface DailySummary {
+    id: number;
     city: string;
+    date: string;
     avgTemp: number;
     maxTemp: number;
     minTemp: number;
@@ -31,7 +33,8 @@ interface DailySummary {
     avgPressure: number;
     avgHumidity: number;
     dominantWeather: string;
-    date: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 const cities = [
@@ -55,7 +58,7 @@ const Charts: React.FC = () => {
 
     const fetchDailySummaries = async (city: string) => {
         try {
-            const response = await axiosInstance.get(`/daily-summaries?city=${city}`);
+            const response = await axiosInstance.get(`/daily-summaries/${city}`);
             setDailySummaries(response.data);
         } catch (error) {
             console.error('Error fetching daily summaries:', error);
@@ -66,56 +69,72 @@ const Charts: React.FC = () => {
         setSelectedCity(event.target.value);
     };
 
-    const chartData = {
-        labels: dailySummaries.map((summary) => summary.date),
-        datasets: [
-            {
-                label: 'Average Temperature',
-                data: dailySummaries.map((summary) => summary.avgTemp),
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            },
-            {
-                label: 'Max Temperature',
-                data: dailySummaries.map((summary) => summary.maxTemp),
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
-            {
-                label: 'Min Temperature',
-                data: dailySummaries.map((summary) => summary.minTemp),
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            },
-        ],
-    };
+    const createChartData = (datasets: { label: string; data: number[]; color: string }[]) => ({
+        labels: dailySummaries.map((summary) => new Date(summary.date).toLocaleDateString()),
+        datasets: datasets.map(({ label, data, color }) => ({
+            label,
+            data,
+            borderColor: color,
+            backgroundColor: `${color}33`, // 20% opacity
+            borderWidth: 2,
+            pointBackgroundColor: color,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: color,
+        })),
+    });
 
-    const options = {
+    const createChartOptions = (title: string) => ({
         responsive: true,
         plugins: {
             legend: {
                 position: 'top' as const,
                 labels: {
-                    color: '#D1D5DB', // text-gray-300
+                    color: '#F3F4F6',
+                    font: {
+                        weight: 'bold',
+                    },
                 },
             },
             title: {
                 display: true,
-                text: `Daily Weather Summary for ${selectedCity}`,
-                color: '#F3F4F6', // text-gray-100
+                text: `${title} for ${selectedCity}`,
+                color: '#F3F4F6',
+                font: {
+                    size: 16,
+                    weight: 'bold',
+                },
             },
         },
         scales: {
             x: {
-                ticks: { color: '#D1D5DB' }, // text-gray-300
-                grid: { color: '#4B5563' }, // text-gray-600
+                ticks: { color: '#F3F4F6' },
+                grid: { color: '#4B5563' },
             },
             y: {
-                ticks: { color: '#D1D5DB' }, // text-gray-300
-                grid: { color: '#4B5563' }, // text-gray-600
+                ticks: { color: '#F3F4F6' },
+                grid: { color: '#4B5563' },
             },
         },
-    };
+    });
+
+    const temperatureData = createChartData([
+        { label: 'Average Temperature (K)', data: dailySummaries.map((summary) => summary.avgTemp), color: '#FF6384' },
+        { label: 'Maximum Temperature (K)', data: dailySummaries.map((summary) => summary.maxTemp), color: '#FF9F40' },
+        { label: 'Minimum Temperature (K)', data: dailySummaries.map((summary) => summary.minTemp), color: '#36A2EB' },
+    ]);
+
+    const feelsLikeData = createChartData([
+        { label: 'Feels Like (K)', data: dailySummaries.map((summary) => summary.avgFeelsLike), color: '#4BC0C0' },
+    ]);
+
+    const pressureData = createChartData([
+        { label: 'Pressure (hPa)', data: dailySummaries.map((summary) => summary.avgPressure), color: '#9966FF' },
+    ]);
+
+    const humidityData = createChartData([
+        { label: 'Humidity (%)', data: dailySummaries.map((summary) => summary.avgHumidity), color: '#FFCE56' },
+    ]);
 
     return (
         <div className="bg-gray-800 shadow-md rounded-lg p-6">
@@ -138,8 +157,31 @@ const Charts: React.FC = () => {
                 </select>
             </div>
             {dailySummaries.length > 0 ? (
-                <div className="bg-gray-700 p-4 rounded-lg shadow">
-                    <Line options={options} data={chartData} />
+                <div className="space-y-8">
+                    <div className="bg-black p-4 rounded-lg shadow max-w-2xl mx-auto">
+                        <div style={{ height: '300px' }}>
+                            {/* @ts-expect-error: Chart.js types are not fully compatible */}
+                            <Line options={createChartOptions('Temperature')} data={temperatureData} />
+                        </div>
+                    </div>
+                    <div className="bg-black p-4 rounded-lg shadow max-w-2xl mx-auto">
+                        <div style={{ height: '300px' }}>
+                            {/* @ts-expect-error: Chart.js types are not fully compatible */}
+                            <Line options={createChartOptions('Feels Like Temperature')} data={feelsLikeData} />
+                        </div>
+                    </div>
+                    <div className="bg-black p-4 rounded-lg shadow max-w-2xl mx-auto">
+                        <div style={{ height: '300px' }}>
+                            {/* @ts-expect-error: Chart.js types are not fully compatible */}
+                            <Line options={createChartOptions('Pressure')} data={pressureData} />
+                        </div>
+                    </div>
+                    <div className="bg-black p-4 rounded-lg shadow max-w-2xl mx-auto">
+                        <div style={{ height: '300px' }}>
+                            {/* @ts-expect-error: Chart.js types are not fully compatible */}
+                            <Line options={createChartOptions('Humidity')} data={humidityData} />
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <p className="text-gray-400 text-center py-4">No data available for the selected city.</p>
