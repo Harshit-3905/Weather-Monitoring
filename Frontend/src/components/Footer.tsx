@@ -1,26 +1,15 @@
-import React from 'react';
+import { Link } from "react-router-dom"
 
-const Footer: React.FC = () => {
+const Footer = () => {
     return (
-        <footer className="bg-gray-900 shadow-lg mt-12">
-            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <p className="text-center text-gray-400 text-sm">
-                    © {new Date().getFullYear()} WeatherApp. All rights reserved.
+        <footer className="bg-gray-800 text-white py-4">
+            <div className="container mx-auto px-4 text-center">
+                <p>Developed By
+                    <Link to="https://harshitjoshi.me" target="_blank" className="hover:text-blue-300 transition-colors"> Harshit Joshi</Link>
                 </p>
-                <div className="mt-4 flex justify-center space-x-6">
-                    <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
-                        Privacy Policy
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
-                        Terms of Service
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
-                        Contact Us
-                    </a>
-                </div>
             </div>
         </footer>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer
