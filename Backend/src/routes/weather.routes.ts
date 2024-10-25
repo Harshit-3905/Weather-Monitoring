@@ -7,8 +7,8 @@ import { createTrigger } from "../controllers/trigger.controller";
 
 const router = express.Router();
 
-router.get("/daily-summaries/:city", getDailySummaries);
-router.get("/current-weather/:city", getCurrentWeather);
+router.get("/daily-summaries", getDailySummaries);
+router.get("/current-weather", getCurrentWeather);
 router.post("/triggers", createTrigger);
 
 export default router;

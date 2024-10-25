@@ -24,16 +24,18 @@ const fetchWeatherData = async (city: string) => {
 
 export const getDailySummaries = async (req: Request, res: Response) => {
   try {
-    const { city } = req.params;
+    const { city } = req.query;
 
-    if (!city) {
-      res.status(400).json({ error: "City parameter is required" });
+    if (!city || typeof city !== "string") {
+      res
+        .status(400)
+        .json({ error: "City parameter is required and must be a string" });
       return;
     }
 
     const dailySummaries = await prisma.dailySummary.findMany({
       where: {
-        city: city as string,
+        city: city,
       },
       orderBy: {
         date: "asc",
@@ -48,12 +50,13 @@ export const getDailySummaries = async (req: Request, res: Response) => {
   }
 };
 
-// Controller function to fetch current weather data for a single city
 export const getCurrentWeather = async (req: Request, res: Response) => {
   try {
-    const { city } = req.params;
-    if (!city) {
-      res.status(400).json({ error: "City parameter is required" });
+    const { city } = req.query;
+    if (!city || typeof city !== "string") {
+      res
+        .status(400)
+        .json({ error: "City parameter is required and must be a string" });
       return;
     }
 

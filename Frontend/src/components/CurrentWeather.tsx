@@ -28,7 +28,9 @@ const CurrentWeather: React.FC = () => {
         const fetchWeatherData = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get(`/current-weather/${selectedCity}`);
+                const response = await axiosInstance.get(`/current-weather`, {
+                    params: { city: selectedCity }
+                });
                 console.log(response);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! status: ${response.status}`);

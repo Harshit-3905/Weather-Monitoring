@@ -58,7 +58,9 @@ const Charts: React.FC = () => {
 
     const fetchDailySummaries = async (city: string) => {
         try {
-            const response = await axiosInstance.get(`/daily-summaries/${city}`);
+            const response = await axiosInstance.get(`/daily-summaries`, {
+                params: { city }
+            });
             setDailySummaries(response.data);
         } catch (error) {
             console.error('Error fetching daily summaries:', error);
