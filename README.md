@@ -2,6 +2,11 @@
 
 Weather-Monitoring is a full-stack application that provides real-time weather information and historical data for various cities. This project combines a frontend built with React and TypeScript, and a backend powered by Node.js with a PostgreSQL database.
 
+## Hosted Links
+
+- Frontend : https://weather-monitoring.harshit-joshi.tech/
+- Backend : https://weather-monitoring-backend.harshit-joshi.tech/
+
 ## Features
 
 - **Real-time Weather Data**: Get up-to-the-minute weather information for multiple cities around the world.
@@ -25,7 +30,9 @@ Weather-Monitoring is a full-stack application that provides real-time weather i
 - Prisma ORM
 - PostgreSQL database
 
-## Getting Started
+## Running the Application
+
+### Steps to Run the Application
 
 1. Clone the repository
 2. Run the application using Docker Compose:
