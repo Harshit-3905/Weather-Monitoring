@@ -5,7 +5,7 @@ Weather-Monitoring is a full-stack application that provides real-time weather i
 ## Hosted Links
 
 - Frontend : https://weather-monitoring.harshit-joshi.tech/
-- Backend : https://weather-monitoring-backend.harshit-joshi.tech/
+- Backend : https://weather-monitoring-24ch.onrender.com/
 
 ## Features
 

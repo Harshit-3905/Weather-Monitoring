@@ -51,6 +51,9 @@ export const calculateDailySummaries = () => {
       });
     }
   });
+  console.log(
+    "Daily summary calculation cron job started (running every day at midnight)"
+  );
 };
 
 function calculateAverage(numbers: number[]): number {

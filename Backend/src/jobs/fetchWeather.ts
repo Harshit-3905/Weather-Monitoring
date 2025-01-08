@@ -47,6 +47,6 @@ const fetchWeatherData = async () => {
 };
 
 export const startWeatherFetchCron = () => {
-  cron.schedule("*/5 * * * *", fetchWeatherData);
-  console.log("Weather fetch cron job started (running every 5 minutes)");
+  cron.schedule("*/14 * * * *", fetchWeatherData);
+  console.log("Weather fetch cron job started (running every 14 minutes)");
 };
